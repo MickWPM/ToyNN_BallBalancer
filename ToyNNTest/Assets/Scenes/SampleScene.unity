@@ -1260,17 +1260,18 @@ MonoBehaviour:
   currentScore: 0
   levelTime: 0
   maxLevelCutoffTime: 20
-  data:
-    ballPosX: 0
-    ballPosY: 0
-    targetPosX: 0
-    targetPosY: 0
-    angleX: 0
-    angleY: 0
-    ballVelocityX: 0
-    ballVelocityY: 0
-    distToEdgeX: 0
-    distToEdgeY: 0
+  dataX:
+    ballPos: 0
+    targetPos: 0
+    angle: 0
+    ballVelocity: 0
+    distToEdge: 0
+  dataY:
+    ballPos: 0
+    targetPos: 0
+    angle: 0
+    ballVelocity: 0
+    distToEdge: 0
   outputs:
     outputX: 0
     outputY: 0
@@ -1279,6 +1280,7 @@ MonoBehaviour:
   ballRB: {fileID: 0}
   numFoundFitnessScaler: 2
   levelTimeFitnessScaler: 1
+  minTimeToCountFound: 5
   playing: 0
   targetRange: 3
   levelBounds: {fileID: 81515829}
@@ -2600,7 +2602,7 @@ MonoBehaviour:
   gameControl: {fileID: 933934197}
   numberOfGenerations: 300
   numPerGeneration: 300
-  numHidden: 20
+  numHidden: 15
   gameCutoffTime: 300
   timeScalingDuringGame: 5
   percentOfTopToKeep: 0.05

@@ -1,4 +1,4 @@
 ﻿public interface IControllerBrain
 {
-    GameControl.DataOutputs GetOutputs(GameControl.DataInputs dataInputs);
+    GameControl.DataOutputs GetOutputs(GameControl.DataInputs dataInputX, GameControl.DataInputs dataInputY);
 }

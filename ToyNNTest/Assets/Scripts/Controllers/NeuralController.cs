@@ -30,9 +30,11 @@ public class NeuralController : IControllerBrain
         }
     }
 
-    public GameControl.DataOutputs GetOutputs(GameControl.DataInputs dataInputs)
+    public GameControl.DataOutputs GetOutputs(GameControl.DataInputs dataInputX, GameControl.DataInputs dataInputY)
     {
-        float[] outputs = neuralNet.ProcessInputs(dataInputs.Vector());
+        float[] outputX = neuralNet.ProcessInputs(dataInputX.Vector());
+        float[] outputY = neuralNet.ProcessInputs(dataInputY.Vector());
+        float[] outputs = new float[] { outputX[0], outputY[0] };
 
         GameControl.DataOutputs output = new GameControl.DataOutputs
         {

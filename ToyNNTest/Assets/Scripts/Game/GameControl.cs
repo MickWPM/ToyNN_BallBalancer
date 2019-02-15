@@ -7,40 +7,32 @@ public class GameControl : MonoBehaviour
     public bool useDistanceToTargetInsteadOfRawTargetPos = false;
     public static readonly int NUM_OUTPUTS = 2;
 
+    //For a single dimension
     [System.Serializable]
     public struct DataInputs
     {
-        public float ballPosX;
-        public float ballPosY;
+        public float ballPos;
 
-        public float targetPosX;
-        public float targetPosY;
+        public float targetPos;
 
-        public float angleX;
-        public float angleY;
+        public float angle;
 
-        public float ballVelocityX;
-        public float ballVelocityY;
+        public float ballVelocity;
 
-        public float distToEdgeX;
-        public float distToEdgeY;
-
-        //public float rotationSpeed;
+        public float distToEdge;
 
         public float[] Vector()
         {
-            return new float[] { ballPosX, ballPosY, targetPosX, targetPosY, angleX, angleY, ballVelocityX, ballVelocityY, distToEdgeX, distToEdgeY/*, rotationSpeed*/ };
+            return new float[] { ballPos, targetPos, angle, ballVelocity, distToEdge};
         }
 
         public override string ToString()
         {
-            string s = "Ball position: " + ballPosX + ", " + ballPosY;
-            s += "\nBall velocity : " + ballVelocityX + ", " + ballVelocityY;
-            s += "\nTarget position: " + targetPosX + ", " + targetPosY;
-            s += "\n\nPlane rotation (degrees): " + angleX + ", " + angleY;
-            //s += "\nPlane rotation speed: " + rotationSpeed;
-            s += "\nHorizontal nearest edge: " + distToEdgeX;
-            s += "\nVertical nearest edge: " + distToEdgeY;
+            string s = "Ball position: " + ballPos;
+            s += "\nBall velocity : " + ballVelocity;
+            s += "\nTarget position: " + targetPos;
+            s += "\n\nPlane rotation (degrees): " + angle;
+            s += "\nNearest edge: " + distToEdge;
 
             return s;
         }
@@ -56,37 +48,36 @@ public class GameControl : MonoBehaviour
 
     private void UpdateData()
     {
-        data.ballPosX = ballTransform.position.x;
-        data.ballPosY = ballTransform.position.z;
+        dataX.ballPos = ballTransform.position.x;
+        dataY.ballPos = ballTransform.position.z;
 
         if (useDistanceToTargetInsteadOfRawTargetPos)
         {
-            data.targetPosX = targetTransform.position.x- ballTransform.position.x;
-            data.targetPosY = targetTransform.position.z - ballTransform.position.z;
+            dataX.targetPos = targetTransform.position.x- ballTransform.position.x;
+            dataY.targetPos = targetTransform.position.z - ballTransform.position.z;
         } else
         {
-            data.targetPosX = targetTransform.position.x;
-            data.targetPosY = targetTransform.position.z;
+            dataX.targetPos = targetTransform.position.x;
+            dataY.targetPos = targetTransform.position.z;
         }
 
-        data.ballVelocityX = ballRB.velocity.x;
-        data.ballVelocityY = ballRB.velocity.z;
+        dataX.ballVelocity = ballRB.velocity.x;
+        dataY.ballVelocity = ballRB.velocity.z;
 
-        data.angleX = transform.rotation.eulerAngles.x > 180 ? transform.rotation.eulerAngles.x - 360 : transform.rotation.eulerAngles.x;
-        data.angleY = transform.rotation.eulerAngles.z > 180 ? transform.rotation.eulerAngles.z - 360 : transform.rotation.eulerAngles.z;
+        dataX.angle = transform.rotation.eulerAngles.x > 180 ? transform.rotation.eulerAngles.x - 360 : transform.rotation.eulerAngles.x;
+        dataY.angle = transform.rotation.eulerAngles.z > 180 ? transform.rotation.eulerAngles.z - 360 : transform.rotation.eulerAngles.z;
 
         Vector2 edgeDistances = GetEdgeDistances();
-        data.distToEdgeX = edgeDistances.x;
-        data.distToEdgeY = edgeDistances.y;
+        dataX.distToEdge = edgeDistances.x;
+        dataY.distToEdge = edgeDistances.y;
 
-        //data.rotationSpeed = groundControl.rotationSpeed;
     }
 
     public float currentScore;
     public float levelTime;
     public float maxLevelCutoffTime = 300f; 
 
-    public DataInputs data;
+    public DataInputs dataX, dataY;
     [SerializeField]
     private DataOutputs outputs;
 
@@ -106,12 +97,13 @@ public class GameControl : MonoBehaviour
         groundControl = gameObject.GetComponent<GroundControl>();
         ballRB = ballTransform.GetComponent<Rigidbody>();
 
-        data = new DataInputs();
+        dataX = new DataInputs();
+        dataY = new DataInputs();
         outputs = new DataOutputs();
         playerController = new PlayerController();
         randomController = new RandomController();
         
-        neuralController = new NeuralController(data.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS);
+        neuralController = new NeuralController(dataX.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS);
 
         brains = new IControllerBrain[] { playerController, randomController, neuralController};
         controllerBrain = brains[0];
@@ -165,7 +157,7 @@ public class GameControl : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            neuralController.RandomiseNetowrk(data.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS);
+            neuralController.RandomiseNetowrk(dataX.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS);
         }
 
         //Get the outputs
@@ -179,12 +171,12 @@ public class GameControl : MonoBehaviour
 
     public int DataInputLength()
     {
-        return data.Vector().Length;
+        return dataX.Vector().Length;
     }
 
     public float numFoundFitnessScaler = 2;
     public float levelTimeFitnessScaler = 1f;
-    public float minTimeToCountFound = 1.5f;
+    public float minTimeToCountFound = 5f;
     public float GetFitnessScore()
     {
         float numFoundVal = 0;
@@ -259,7 +251,7 @@ public class GameControl : MonoBehaviour
     public IControllerBrain controllerBrain;
     private void UpdateOutputs()
     {
-        outputs = controllerBrain.GetOutputs(data);
+        outputs = controllerBrain.GetOutputs(dataX, dataY);
     }
 
     public BoxCollider levelBounds;
@@ -287,7 +279,8 @@ public class GameControl : MonoBehaviour
     public string GetDataString()
     {
         string s = "SCENE DATA: \n";
-        s += data;
+        s += "X axis: "+dataX;
+        s += "\n\nY axis: " + dataY;
         s += "\n\nCONTROL OUTPUTS: \n";
         s += "X control: " + outputs.outputX;
         s += "\nY control: " + outputs.outputY;

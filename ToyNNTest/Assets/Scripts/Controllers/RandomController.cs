@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RandomController : IControllerBrain
 {
-    public GameControl.DataOutputs GetOutputs(GameControl.DataInputs dataInputs)
+    public GameControl.DataOutputs GetOutputs(GameControl.DataInputs dataInputX, GameControl.DataInputs dataInputY)
     {
         GameControl.DataOutputs outputs;
         outputs.outputX = Random.Range(-1f, 1f);
