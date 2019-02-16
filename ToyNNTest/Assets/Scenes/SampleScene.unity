@@ -1262,12 +1262,10 @@ MonoBehaviour:
   maxLevelCutoffTime: 20
   dataX:
     ballPos: 0
-    targetPos: 0
     angle: 0
     ballVelocity: 0
   dataY:
     ballPos: 0
-    targetPos: 0
     angle: 0
     ballVelocity: 0
   outputs:
@@ -1280,6 +1278,7 @@ MonoBehaviour:
   levelTimeFitnessScaler: 1
   minTimeToCountFound: 5
   playing: 0
+  randomTerrainOrientation: 5
   targetRange: 3
 --- !u!54 &933934198
 Rigidbody:
@@ -2500,7 +2499,7 @@ BoxCollider:
   m_GameObject: {fileID: 1674042904}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2511,7 +2510,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1674042904}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2598,11 +2597,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameControl: {fileID: 933934197}
   numberOfGenerations: 300
-  numPerGeneration: 100
-  numHidden: 15
+  numPerGeneration: 150
+  numHidden: 10
   gameCutoffTime: 300
   timeScalingDuringGame: 5
-  percentOfTopToKeep: 0.1
+  percentOfTopToKeep: 0.05
   percentOfBottomToDiscard: 0.33
   mutateMax: 0.1
 --- !u!4 &1777830596

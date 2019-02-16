@@ -13,7 +13,7 @@ public class GameControl : MonoBehaviour
     {
         public float ballPos;
 
-        public float targetPos;
+        //public float targetPos;
 
         public float angle;
 
@@ -23,14 +23,14 @@ public class GameControl : MonoBehaviour
 
         public float[] Vector()
         {
-            return new float[] { ballPos, targetPos, angle, ballVelocity/*, distToEdge*/};
+            return new float[] { ballPos/*, targetPos*/, angle, ballVelocity/*, distToEdge*/};
         }
 
         public override string ToString()
         {
             string s = "Ball position: " + ballPos;
             s += "\nBall velocity : " + ballVelocity;
-            s += "\nTarget position: " + targetPos;
+            //s += "\nTarget position: " + targetPos;
             s += "\n\nPlane rotation (degrees): " + angle;
             //s += "\nNearest edge: " + distToEdge;
 
@@ -48,18 +48,18 @@ public class GameControl : MonoBehaviour
 
     private void UpdateData()
     {
-        dataX.ballPos = ballTransform.position.x;
-        dataY.ballPos = ballTransform.position.z;
+        dataX.ballPos = ballTransform.localPosition.x;
+        dataY.ballPos = ballTransform.localPosition.z;
 
-        if (useDistanceToTargetInsteadOfRawTargetPos)
-        {
-            dataX.targetPos = targetTransform.position.x- ballTransform.position.x;
-            dataY.targetPos = targetTransform.position.z - ballTransform.position.z;
-        } else
-        {
-            dataX.targetPos = targetTransform.position.x;
-            dataY.targetPos = targetTransform.position.z;
-        }
+        //if (useDistanceToTargetInsteadOfRawTargetPos)
+        //{
+        //    dataX.targetPos = targetTransform.localPosition.x- ballTransform.localPosition.x;
+        //    dataY.targetPos = targetTransform.localPosition.z - ballTransform.localPosition.z;
+        //} else
+        //{
+        //    dataX.targetPos = targetTransform.localPosition.x;
+        //    dataY.targetPos = targetTransform.localPosition.z;
+        //}
 
         dataX.ballVelocity = ballRB.velocity.x;
         dataY.ballVelocity = ballRB.velocity.z;
@@ -179,12 +179,13 @@ public class GameControl : MonoBehaviour
     public float minTimeToCountFound = 5f;
     public float GetFitnessScore()
     {
-        float numFoundVal = 0;
-        for (int i = 0; i < numFound; i++)
-        {
-            numFoundVal += i;
-        }
-        return numFoundVal * numFoundFitnessScaler + levelTime* levelTimeFitnessScaler;
+        //float numFoundVal = 0;
+        //for (int i = 0; i < numFound; i++)
+        //{
+        //    numFoundVal += i;
+        //}
+
+        return /*numFoundVal * numFoundFitnessScaler +*/ levelTime * levelTimeFitnessScaler;
     }
 
     int numFound = 0;
@@ -225,6 +226,7 @@ public class GameControl : MonoBehaviour
         StartGame();
     }
 
+    public float randomTerrainOrientation = 0;
     public int targetRange = 3;
     public void StartGame()
     {
@@ -238,6 +240,8 @@ public class GameControl : MonoBehaviour
         ballTransform.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         ballTransform.localPosition = new Vector3(0, 1, 0);
         targetTransform.localPosition = new Vector3(Random.Range(-targetRange, targetRange), 0, Random.Range(-targetRange, targetRange));
+
+        groundControl.RandomiseOrientation(randomTerrainOrientation);
     }
 
     public DataOutputs GetOutput()

@@ -16,6 +16,19 @@ public class GroundControl : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
     }
 
+    public void RandomiseOrientation(float maxAngle)
+    {
+        Vector3 newRot = new Vector3
+            (
+                Random.Range(-maxAngle, maxAngle),
+                0,
+                Random.Range(-maxAngle, maxAngle)
+            );
+
+
+        transform.rotation = Quaternion.Euler(newRot);
+    }
+
     GameControl.DataOutputs controlInput;
     void Update()
     {
