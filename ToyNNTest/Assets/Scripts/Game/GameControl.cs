@@ -19,11 +19,11 @@ public class GameControl : MonoBehaviour
 
         public float ballVelocity;
 
-        public float distToEdge;
+        //public float distToEdge;
 
         public float[] Vector()
         {
-            return new float[] { ballPos, targetPos, angle, ballVelocity, distToEdge};
+            return new float[] { ballPos, targetPos, angle, ballVelocity/*, distToEdge*/};
         }
 
         public override string ToString()
@@ -32,7 +32,7 @@ public class GameControl : MonoBehaviour
             s += "\nBall velocity : " + ballVelocity;
             s += "\nTarget position: " + targetPos;
             s += "\n\nPlane rotation (degrees): " + angle;
-            s += "\nNearest edge: " + distToEdge;
+            //s += "\nNearest edge: " + distToEdge;
 
             return s;
         }
@@ -67,9 +67,9 @@ public class GameControl : MonoBehaviour
         dataX.angle = transform.rotation.eulerAngles.x > 180 ? transform.rotation.eulerAngles.x - 360 : transform.rotation.eulerAngles.x;
         dataY.angle = transform.rotation.eulerAngles.z > 180 ? transform.rotation.eulerAngles.z - 360 : transform.rotation.eulerAngles.z;
 
-        Vector2 edgeDistances = GetEdgeDistances();
-        dataX.distToEdge = edgeDistances.x;
-        dataY.distToEdge = edgeDistances.y;
+        //Vector2 edgeDistances = GetEdgeDistances();
+        //dataX.distToEdge = edgeDistances.x;
+        //dataY.distToEdge = edgeDistances.y;
 
     }
 
@@ -254,27 +254,27 @@ public class GameControl : MonoBehaviour
         outputs = controllerBrain.GetOutputs(dataX, dataY);
     }
 
-    public BoxCollider levelBounds;
-    Vector2 GetEdgeDistances()
-    {
-        float edgeDistanceX = levelBounds.transform.localScale.x / 2 - 1;
-        float edgeDistanceY = levelBounds.transform.localScale.z / 2 - 1;
+    //public BoxCollider levelBounds;
+    //Vector2 GetEdgeDistances()
+    //{
+    //    float edgeDistanceX = levelBounds.transform.localScale.x / 2 - 1;
+    //    float edgeDistanceY = levelBounds.transform.localScale.z / 2 - 1;
 
-        float nearX, nearY;
+    //    float nearX, nearY;
 
-        if (ballTransform.localPosition.x >= 0)
-            nearX = edgeDistanceX - ballTransform.localPosition.x;
-        else
-            nearX = edgeDistanceX + ballTransform.localPosition.x;
+    //    if (ballTransform.localPosition.x >= 0)
+    //        nearX = edgeDistanceX - ballTransform.localPosition.x;
+    //    else
+    //        nearX = edgeDistanceX + ballTransform.localPosition.x;
 
-        if (ballTransform.localPosition.z >= 0)
-            nearY = edgeDistanceY - ballTransform.localPosition.z;
-        else
-            nearY = edgeDistanceY + ballTransform.localPosition.z;
+    //    if (ballTransform.localPosition.z >= 0)
+    //        nearY = edgeDistanceY - ballTransform.localPosition.z;
+    //    else
+    //        nearY = edgeDistanceY + ballTransform.localPosition.z;
 
-        return new Vector2(nearX, nearY);
+    //    return new Vector2(nearX, nearY);
 
-    }
+    //}
 
     public string GetDataString()
     {

@@ -35,11 +35,19 @@ public class NeuralController : IControllerBrain
         float[] outputX = neuralNet.ProcessInputs(dataInputX.Vector());
         float[] outputY = neuralNet.ProcessInputs(dataInputY.Vector());
         float[] outputs = new float[] { outputX[0], outputY[0] };
+        
+        ////Normal output activation
+        //GameControl.DataOutputs output = new GameControl.DataOutputs
+        //{
+        //    outputX = outputs[0] * 2 - 1,
+        //    outputY = outputs[1] * 2 - 1
+        //};
 
+        //Tanh output activation
         GameControl.DataOutputs output = new GameControl.DataOutputs
         {
-            outputX = outputs[0]*2-1,
-            outputY = outputs[1]*2-1
+            outputX = outputs[0],
+            outputY = outputs[1]
         };
         return output;
     }

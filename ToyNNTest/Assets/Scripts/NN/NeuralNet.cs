@@ -73,10 +73,22 @@ public class NeuralNet
             }
             summedActivation += hiddenToOutputWeights[FirstHiddenLayerNodes, i];
 
-            outputs[i] = 1 / (1 + Mathf.Exp(-summedActivation)); 
+            //Swap to Tanh
+            //outputs[i] = Activate(summedActivation);
+            outputs[i] = ActivateTanh(summedActivation);
         }
 
         return outputs;
+    }
+
+    float Activate(float val)
+    {
+        return (1 / (1 + Mathf.Exp(-val)));
+    }
+
+    float ActivateTanh(float val)
+    {
+        return (float)System.Math.Tanh(val);
     }
 
 

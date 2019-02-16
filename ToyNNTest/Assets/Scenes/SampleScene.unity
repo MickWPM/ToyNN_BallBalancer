@@ -1265,13 +1265,11 @@ MonoBehaviour:
     targetPos: 0
     angle: 0
     ballVelocity: 0
-    distToEdge: 0
   dataY:
     ballPos: 0
     targetPos: 0
     angle: 0
     ballVelocity: 0
-    distToEdge: 0
   outputs:
     outputX: 0
     outputY: 0
@@ -1283,7 +1281,6 @@ MonoBehaviour:
   minTimeToCountFound: 5
   playing: 0
   targetRange: 3
-  levelBounds: {fileID: 81515829}
 --- !u!54 &933934198
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2601,11 +2598,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameControl: {fileID: 933934197}
   numberOfGenerations: 300
-  numPerGeneration: 300
+  numPerGeneration: 100
   numHidden: 15
   gameCutoffTime: 300
   timeScalingDuringGame: 5
-  percentOfTopToKeep: 0.05
+  percentOfTopToKeep: 0.1
   percentOfBottomToDiscard: 0.33
   mutateMax: 0.1
 --- !u!4 &1777830596
