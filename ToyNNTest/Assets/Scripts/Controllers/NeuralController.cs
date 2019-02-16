@@ -8,7 +8,7 @@ public class NeuralController : IControllerBrain
     public NeuralController(int numInputNodes, int firstHiddenLayerNodes, int numOutputNodes)
     {
         neuralNet = new NeuralNet(numInputNodes, firstHiddenLayerNodes, numOutputNodes);
-        if (numOutputNodes != GameControl.NUM_OUTPUTS)
+        if (numOutputNodes != GameControl.NUM_OUTPUTS_FOR_NN)
         {
             Debug.LogError("NUM OUTPUT NODES != 2");
             Debug.Break();
@@ -23,7 +23,7 @@ public class NeuralController : IControllerBrain
     public void RandomiseNetowrk(int numInputNodes, int firstHiddenLayerNodes, int numOutputNodes)
     {
         this.neuralNet = new NeuralNet(numInputNodes, firstHiddenLayerNodes, numOutputNodes);
-        if (numOutputNodes != GameControl.NUM_OUTPUTS)
+        if (numOutputNodes != GameControl.NUM_OUTPUTS_FOR_NN)
         {
             Debug.LogError("NUM OUTPUT NODES != 2");
             Debug.Break();

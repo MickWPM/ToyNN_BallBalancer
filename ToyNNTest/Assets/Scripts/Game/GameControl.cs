@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameControl : MonoBehaviour
 {
     public bool useDistanceToTargetInsteadOfRawTargetPos = false;
-    public static readonly int NUM_OUTPUTS = 2;
+    public static readonly int NUM_OUTPUTS_FOR_NN = 1;
 
     //For a single dimension
     [System.Serializable]
@@ -103,7 +103,7 @@ public class GameControl : MonoBehaviour
         playerController = new PlayerController();
         randomController = new RandomController();
         
-        neuralController = new NeuralController(dataX.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS);
+        neuralController = new NeuralController(dataX.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS_FOR_NN);
 
         brains = new IControllerBrain[] { playerController, randomController, neuralController};
         controllerBrain = brains[0];
@@ -163,7 +163,7 @@ public class GameControl : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            neuralController.RandomiseNetowrk(dataX.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS);
+            neuralController.RandomiseNetowrk(dataX.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS_FOR_NN);
         }
         
     }

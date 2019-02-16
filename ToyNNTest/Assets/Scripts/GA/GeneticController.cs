@@ -145,7 +145,7 @@ public class GeneticController : MonoBehaviour
     {
         for (int i = startIndex; i < numPerGeneration; i++)
         {
-            neuralNetsThisGeneration[i] = new NeuralNet(gameControl.DataInputLength(), numHidden, 2);
+            neuralNetsThisGeneration[i] = new NeuralNet(gameControl.DataInputLength(), numHidden, GameControl.NUM_OUTPUTS_FOR_NN);
         }
     }
 

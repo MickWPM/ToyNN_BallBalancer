@@ -20,7 +20,7 @@ public class NeuralNet
         this.NumInputNodes = numInputNodes;
         this.NumOutputNodes = numOutputNodes;
         this.FirstHiddenLayerNodes = firstHiddenLayerNodes;
-        if (this.NumOutputNodes != GameControl.NUM_OUTPUTS)
+        if (this.NumOutputNodes != GameControl.NUM_OUTPUTS_FOR_NN)
         {
             Debug.LogError("NUM OUTPUT NODES != 2");
             Debug.Break();
@@ -31,13 +31,13 @@ public class NeuralNet
 
     public float[] ProcessInputs(float[] inputs)
     {
-        if (NumOutputNodes != GameControl.NUM_OUTPUTS)
+        if (NumOutputNodes != GameControl.NUM_OUTPUTS_FOR_NN)
         {
             Debug.LogWarning("NUM OUTPUTS NOT EQUAL TO TWO HERE!!!");
             Debug.Break();
         }
         //float[] outputs = new float[numOutputNodes];
-        float[] outputs = new float[GameControl.NUM_OUTPUTS];
+        float[] outputs = new float[GameControl.NUM_OUTPUTS_FOR_NN];
 
         float[] hiddenActivations = new float[FirstHiddenLayerNodes];
         for (int i = 0; i < FirstHiddenLayerNodes; i++)
@@ -60,7 +60,7 @@ public class NeuralNet
         }
 
         //for (int i = 0; i < numOutputNodes; i++)
-        for (int i = 0; i < GameControl.NUM_OUTPUTS; i++)
+        for (int i = 0; i < GameControl.NUM_OUTPUTS_FOR_NN; i++)
         {
             float summedActivation = 0;
             for (int j = 0; j < FirstHiddenLayerNodes; j++)
@@ -119,7 +119,7 @@ public class NeuralNet
         this.NumInputNodes = (int)genome[0];
         this.FirstHiddenLayerNodes = (int)genome[1];
         this.NumOutputNodes = (int)genome[2];
-        if (this.NumOutputNodes != GameControl.NUM_OUTPUTS)
+        if (this.NumOutputNodes != GameControl.NUM_OUTPUTS_FOR_NN)
         {
             Debug.Log("[" + genome[0] + "," + genome[1] + "," + genome[2] + "]");
             Debug.LogError("NUM OUTPUT NODES != 2");
