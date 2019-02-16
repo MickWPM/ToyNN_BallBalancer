@@ -32,8 +32,8 @@ public class NeuralController : IControllerBrain
 
     public GameControl.DataOutputs GetOutputs(GameControl.DataInputs dataInputX, GameControl.DataInputs dataInputY)
     {
-        float[] outputX = neuralNet.ProcessInputs(dataInputX.Vector());
-        float[] outputY = neuralNet.ProcessInputs(dataInputY.Vector());
+        float[] outputX = neuralNet.ProcessInputs(dataInputY.Vector());
+        float[] outputY = neuralNet.ProcessInputs(dataInputX.Vector());
         float[] outputs = new float[] { outputX[0], outputY[0] };
         
         ////Normal output activation

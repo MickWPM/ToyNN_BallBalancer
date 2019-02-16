@@ -8,7 +8,7 @@ public class PlayerController : IControllerBrain
     {
         GameControl.DataOutputs outputs;
         outputs.outputX = Input.GetAxisRaw("Vertical");
-        outputs.outputY = -Input.GetAxisRaw("Horizontal");
+        outputs.outputY = Input.GetAxisRaw("Horizontal");
 
         return outputs;
     }

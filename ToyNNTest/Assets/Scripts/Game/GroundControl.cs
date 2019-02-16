@@ -46,7 +46,7 @@ public class GroundControl : MonoBehaviour
             (
                 Mathf.Clamp(curRot.x + controlInput.outputX * Time.deltaTime * rotationSpeed, -maxABSRotationChange.x, maxABSRotationChange.x),
                 0,
-                Mathf.Clamp(curRot.z + controlInput.outputY * Time.deltaTime * rotationSpeed, -maxABSRotationChange.z, maxABSRotationChange.z)
+                Mathf.Clamp(curRot.z - controlInput.outputY * Time.deltaTime * rotationSpeed, -maxABSRotationChange.z, maxABSRotationChange.z)
             );
 
 

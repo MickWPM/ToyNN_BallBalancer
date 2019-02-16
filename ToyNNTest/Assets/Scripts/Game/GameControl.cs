@@ -48,8 +48,8 @@ public class GameControl : MonoBehaviour
 
     private void UpdateData()
     {
-        dataX.ballPos = ballTransform.localPosition.x;
         dataY.ballPos = ballTransform.localPosition.z;
+        dataX.ballPos = ballTransform.localPosition.x;
 
         //if (useDistanceToTargetInsteadOfRawTargetPos)
         //{
@@ -61,11 +61,11 @@ public class GameControl : MonoBehaviour
         //    dataY.targetPos = targetTransform.localPosition.z;
         //}
 
-        dataX.ballVelocity = ballRB.velocity.x;
         dataY.ballVelocity = ballRB.velocity.z;
+        dataX.ballVelocity = ballRB.velocity.x;
 
-        dataX.angle = transform.rotation.eulerAngles.x > 180 ? transform.rotation.eulerAngles.x - 360 : transform.rotation.eulerAngles.x;
-        dataY.angle = transform.rotation.eulerAngles.z > 180 ? transform.rotation.eulerAngles.z - 360 : transform.rotation.eulerAngles.z;
+        dataY.angle = transform.rotation.eulerAngles.x > 180 ? transform.rotation.eulerAngles.x - 360 : transform.rotation.eulerAngles.x;
+        dataX.angle = transform.rotation.eulerAngles.z > 180 ? transform.rotation.eulerAngles.z - 360 : transform.rotation.eulerAngles.z;
 
         //Vector2 edgeDistances = GetEdgeDistances();
         //dataX.distToEdge = edgeDistances.x;
@@ -130,6 +130,12 @@ public class GameControl : MonoBehaviour
                 EndGame();
             }
 
+        } else
+        {
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                StartGame();
+            }
         }
         currentScore = GetFitnessScore(); 
 
@@ -159,9 +165,7 @@ public class GameControl : MonoBehaviour
         {
             neuralController.RandomiseNetowrk(dataX.Vector().Length, NEURAL_HIDDEN, NUM_OUTPUTS);
         }
-
-        //Get the outputs
-
+        
     }
 
     public void SetNeuralController( NeuralController neuralController )
@@ -248,7 +252,7 @@ public class GameControl : MonoBehaviour
     {
         UpdateData();
         UpdateOutputs();
-
+        
         return outputs;
     }
 
@@ -286,9 +290,9 @@ public class GameControl : MonoBehaviour
         s += "X axis: "+dataX;
         s += "\n\nY axis: " + dataY;
         s += "\n\nCONTROL OUTPUTS: \n";
-        s += "X control: " + outputs.outputX;
-        s += "\nY control: " + outputs.outputY;
-
+        s += "X control: " + outputs.outputY;
+        s += "\nY control: " + outputs.outputX;
+        //NOTE: The X and Y control names are swapped due to some strange logic I have implemented. Works fine under the hood but for labels sake they are swapped here.
         return s;
     }
 
