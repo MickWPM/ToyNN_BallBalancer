@@ -2586,6 +2586,7 @@ MonoBehaviour:
   genomeElementMutateChance: 0.3
   mutateMax: 0.2
   chanceToMutateNodewise: 0.5
+  elitesImmuneToMutate: 0.05
 --- !u!4 &1777830596
 Transform:
   m_ObjectHideFlags: 0
