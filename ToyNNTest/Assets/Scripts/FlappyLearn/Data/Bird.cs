@@ -3,7 +3,7 @@
     [System.Serializable]
     public class Bird
     {
-        public static float BirdRadius = 1;
+        public static float BirdRadius = 0.5f;
         public static float MaxVelocity = 15;
         [UnityEngine.SerializeField] float height;
         [UnityEngine.SerializeField] public float velocity;

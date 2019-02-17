@@ -12,8 +12,8 @@ namespace FlappyLearn
         public void ShowPillar(Pillar pillar)
         {
             this.pillar = pillar;
-            pillarUp.localScale = new Vector3(Pillar.halfWidth, 1, 1);
-            pillarDown.localScale = new Vector3(Pillar.halfWidth, 1, 1);
+            pillarUp.localScale = new Vector3(Pillar.halfWidth*2, 1, 1);
+            pillarDown.localScale = new Vector3(Pillar.halfWidth*2, 1, 1);
 
             
             pillarUp.localPosition = new Vector3(0, pillar.CentrePointGap + Pillar.gapHalfHeight, 0);

@@ -8,7 +8,7 @@ namespace FlappyLearn
     public class Pillar
     {
         public static readonly float halfWidth = 1.5f;
-        public static readonly float gapHalfHeight = 2f;
+        public static readonly float gapHalfHeight = 3f;
 
         float centrePointX;
         float centrePointGap;
@@ -36,10 +36,10 @@ namespace FlappyLearn
 
             //At this point, the bird is 'inside' the pillar X
 
-            if (Bird.BirdRadius - bird.Height < centrePointGap - halfWidth)
+            if (bird.Height - Bird.BirdRadius < centrePointGap - gapHalfHeight)
                 return true;
 
-            if (Bird.BirdRadius + bird.Height > centrePointGap + halfWidth)
+            if (Bird.BirdRadius + bird.Height > centrePointGap + gapHalfHeight)
                 return true;
 
             return false;

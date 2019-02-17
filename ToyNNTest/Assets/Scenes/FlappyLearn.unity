@@ -262,7 +262,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f6a032b32ba345f448bb37686b1d1075, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b30f74cd2eeeb648ba8d6e4705cc6de, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -306,6 +306,7 @@ MonoBehaviour:
   flapForce: 3000
   birdController:
     baseDeltaTime: 0
+    birds: []
   pillarStartLoc: 40
   pillarEndLoc: -10
   numPillars: 5
