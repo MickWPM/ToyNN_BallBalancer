@@ -2579,10 +2579,13 @@ MonoBehaviour:
   numPerGeneration: 150
   numHidden: 5
   gameCutoffTime: 300
-  timeScalingDuringGame: 7
+  timeScalingDuringGame: 10
   percentOfTopToKeep: 0.05
   percentOfBottomToDiscard: 0.33
-  mutateMax: 0.1
+  baseMutateChance: 0.1
+  genomeElementMutateChance: 0.3
+  mutateMax: 0.2
+  chanceToMutateNodewise: 0.5
 --- !u!4 &1777830596
 Transform:
   m_ObjectHideFlags: 0

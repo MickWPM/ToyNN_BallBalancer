@@ -94,13 +94,10 @@ public class GeneticController : MonoBehaviour
     void EndGeneration()
     {
         generationFitness.Sort((s1, s2) => s2.fitness.CompareTo(s1.fitness));
-
-        //Debug.Log("Zero index fitness = " + generationFitness[0].fitness + ", "+ (generationFitness.Count - 1 )+ " index = " + generationFitness[generationFitness.Count-1].fitness);
-
-
+        
         if (EndGenerationEvent != null)
             EndGenerationEvent(currentGeneration, bestGenerationFitness);
-        //TEST
+
         if (currentGeneration < numberOfGenerations)
         {
             NewGeneration();
@@ -149,18 +146,17 @@ public class GeneticController : MonoBehaviour
         }
     }
 
-    float baseMutateChance = 0.05f;
-    float genomeElementMutateChance = 0.2f;
+    public float baseMutateChance = 0.05f;
+    public float genomeElementMutateChance = 0.2f;
     void NewGen()
     {
-        //Debug.Log("Next gen");
         ++currentGeneration;
         if (NewGenerationEvent != null)
             NewGenerationEvent(currentGeneration);
 
         int topToKeep = Mathf.CeilToInt(numPerGeneration * percentOfTopToKeep);
         int bottomToDiscard = (int)(numPerGeneration * percentOfBottomToDiscard);
-        //Debug.Log("Keeping top" + topToKeep);
+
         for (int i = 0; i < topToKeep; i++)
         {
             neuralNetsThisGeneration[i] = new NeuralNet( generationFitness[i].genome );
@@ -253,23 +249,99 @@ public class GeneticController : MonoBehaviour
     }
 
     public float mutateMax = 0.3f;
+    public float chanceToMutateNodewise = 0.5f;
     void Mutate()
     {
-
-        //Debug.Log("Mutate");
-        for (int i = 0; i < numPerGeneration; i++)
+        int topToKeep = Mathf.CeilToInt(numPerGeneration * percentOfTopToKeep / 2);
+        for (int i = topToKeep; i < numPerGeneration; i++)
         {
             if (Random.Range(0f,1f) < baseMutateChance)
             {
-                float[] genome = neuralNetsThisGeneration[i].GetGenome();
-                for (int j = 3; j < genome.Length; j++)
+                if (Random.Range(0f, 1f) < chanceToMutateNodewise )
                 {
-                    if (Random.Range(0f, 1f) < genomeElementMutateChance)
-                    {
-                        genome[j] += Random.Range(-mutateMax, mutateMax);
-                    }
+                    MutateNodewise(i);
+                } else
+                {
+                    MutateElementwise(i);
                 }
-                neuralNetsThisGeneration[i] = new NeuralNet(genome);
+            }
+        }
+    }
+
+    void MutateElementwise(int index)
+    {
+        float[] genome = neuralNetsThisGeneration[index].GetGenome();
+        for (int j = 3; j < genome.Length; j++)
+        {
+            if (Random.Range(0f, 1f) < genomeElementMutateChance)
+            {
+                genome[j] = MutateValue(genome[j]);
+            }
+        }
+        neuralNetsThisGeneration[index] = new NeuralNet(genome);
+    }
+
+    enum MutateType { MODIFY_BY_RANGE, SCALE_BY_RANGE, FLIP_SIGN, MUTATE_TYPE_COUNT}
+    
+    float MutateValue(float currentValue)
+    {
+        MutateType type = (MutateType)(Random.Range(0, (int)MutateType.MUTATE_TYPE_COUNT));
+        return MutateValue(currentValue, type);
+    }
+
+    float MutateValue(float currentValue, MutateType mutateType)
+    {
+        float mutatedValue;
+        switch (mutateType)
+        {
+            case MutateType.SCALE_BY_RANGE:
+                mutatedValue = Random.Range(-mutateMax, mutateMax) * currentValue;
+                break;
+            case MutateType.FLIP_SIGN:
+                mutatedValue = -currentValue;
+                break;
+            case MutateType.MODIFY_BY_RANGE:
+            default:
+                mutatedValue = Random.Range(-mutateMax, mutateMax) + currentValue;
+                break;
+        }
+
+
+        return mutatedValue;
+    }
+
+
+    void MutateNodewise(int index)
+    {
+        float[] genome = generationFitness[index].genome;
+
+        NeuralNet parentNet = new NeuralNet(genome);
+
+        bool mutateThisNode = true;
+
+        for (int i = 0; i < parentNet.NumInputNodes + 1; i++)
+        {
+            if (mutateThisNode)
+            {
+                for (int j = 0; j < parentNet.FirstHiddenLayerNodes; j++)
+                {
+                    int subIndex = 3 + i * parentNet.FirstHiddenLayerNodes + j;
+                    genome[subIndex] = MutateValue(genome[subIndex]);
+                }
+            }
+        }
+
+        int offset = (parentNet.NumInputNodes + 1) * parentNet.FirstHiddenLayerNodes + 3;
+
+        for (int i = 0; i < parentNet.FirstHiddenLayerNodes + 1; i++)
+        {
+            if (mutateThisNode)
+            {
+                for (int j = 0; j < parentNet.NumOutputNodes; j++)
+                {
+                    int subIndex = offset + i * parentNet.NumOutputNodes + j;
+                    genome[subIndex] = MutateValue(genome[subIndex]);
+                }
             }
         }
     }

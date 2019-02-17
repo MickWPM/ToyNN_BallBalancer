@@ -123,7 +123,7 @@ public class GameControl : MonoBehaviour
     {
         if (playing)
         {
-            levelTime += Time.deltaTime/Time.timeScale;
+            levelTime += Time.deltaTime;
             if (levelTime > maxLevelCutoffTime)
             {
                 Debug.LogWarning("MAX LEVEL CUTOFF TIME REACHED. Level time = " + levelTime + ". Cutoff = " + maxLevelCutoffTime);
