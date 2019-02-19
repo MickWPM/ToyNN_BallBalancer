@@ -9,7 +9,7 @@ namespace FlappyLearn
     {
         public float startHeight = 5f;
         public float flapForce = 5f;
-        public BirdController birdController;
+        public BirdManager birdController;
 
         Pillar pillar;
         Queue<Pillar> pillars;
@@ -25,7 +25,7 @@ namespace FlappyLearn
         float deltaTime;
         void Start()
         {
-            birdController = new BirdController(new Bird(startHeight), flapForce);
+            birdController = new BirdManager(new Bird(startHeight), flapForce, new RandomController());
 
             pillars = new Queue<Pillar>();
             pillarGraphics = new Queue<PillarMono>();
@@ -41,18 +41,25 @@ namespace FlappyLearn
                 pillarGraphics.Enqueue(pillarShow);
                 pillarShow.ShowPillar(p);
             }
+
+            
+        }
+
+        float gameTime;
+        void StartGame()
+        {
+            gameStarted = true;
+            gameTime = 0;
         }
 
         public Transform birdDemo;
         public PillarMono pillarMonoPrefab;
 
+        bool gameStarted = false;
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                birdController.Flap(0);
-            }
-
+            if (!gameStarted)
+                return;
             deltaTime = Time.deltaTime;
             UpdateBirdMovement();
             UpdatePillarMovement();
@@ -67,7 +74,7 @@ namespace FlappyLearn
 
         void UpdateBirdMovement()
         {
-            birdController.Tick(deltaTime);
+            birdController.Tick(deltaTime, pillars.ToArray());
             birdDemo.position = new Vector3(0, birdController.GetBird(0).Height, 0);
         }
 
@@ -103,7 +110,8 @@ namespace FlappyLearn
             {
                 foreach (var pillar in pillars)
                 {
-                    if (pillar.HitBird(bird))
+                    if (pillar.HitBird
+                        (bird))
                     {
                         bird.Die();
                         break;

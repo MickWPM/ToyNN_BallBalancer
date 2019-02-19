@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c14c57eaf34b84ca3d94369a6fca10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startHeight: 5
+  startHeight: 10
   flapForce: 3000
   birdController:
     baseDeltaTime: 0
