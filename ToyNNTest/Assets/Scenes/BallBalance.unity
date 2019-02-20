@@ -2580,11 +2580,11 @@ MonoBehaviour:
   numHidden: 5
   gameCutoffTime: 300
   timeScalingDuringGame: 10
-  percentOfTopToKeep: 0.6
+  percentOfTopToKeep: 0.05
   percentOfBottomToDiscard: 0.2
   baseMutateChance: 0.1
   genomeElementMutateChance: 0.3
-  mutateMax: 0.2
+  mutateMax: 2
   chanceToMutateNodewise: 0.5
   elitesImmuneToMutate: 0.05
 --- !u!4 &1777830596

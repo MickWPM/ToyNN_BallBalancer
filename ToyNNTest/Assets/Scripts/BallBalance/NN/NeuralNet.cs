@@ -102,7 +102,7 @@ namespace BallBalance
             {
                 for (int j = 0; j < FirstHiddenLayerNodes; j++)
                 {
-                    inputToHiddenWeights[i, j] = Random.Range(-0.3f, 0.3f);
+                    inputToHiddenWeights[i, j] = Random.Range(-10f, 10f);
                 }
             }
 
@@ -111,7 +111,7 @@ namespace BallBalance
             {
                 for (int j = 0; j < NumOutputNodes; j++)
                 {
-                    hiddenToOutputWeights[i, j] = Random.Range(-0.3f, 0.3f);
+                    hiddenToOutputWeights[i, j] = Random.Range(-10f, 10f);
                 }
             }
         }
