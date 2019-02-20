@@ -8,9 +8,11 @@ namespace FlappyLearn
     public class BirdMono : MonoBehaviour
     {
         public float maxScore = 0;
+        public int hiddenNodes = 3;
 
         public int numToRun = 5;
         List<FlappyGame> gamesRunning;
+        List<IBirdController> controllersForGames;
         int numStillRunning;
 
         public bool useHuman = true;
@@ -27,13 +29,16 @@ namespace FlappyLearn
 
         void Start()
         {
+            controllersForGames = new List<IBirdController>();
             if (useHuman)
             {
-                FlappyGame = new FlappyGame(new HumanController());
+                controllersForGames.Add(new HumanController());
             } else
             {
-                FlappyGame = new FlappyGame(new RandomController(), true);
+                controllersForGames.Add(new NeuralController(hiddenNodes));
             }
+
+            FlappyGame = new FlappyGame(controllersForGames[0]);
 
             FlappyGame.OnPillarOffScreenEvent += () =>
             {
@@ -49,7 +54,9 @@ namespace FlappyLearn
 
             for (int i = 1; i < numToRun; i++)
             {
-                FlappyGame game = new FlappyGame(new RandomController());
+                IBirdController controller = new NeuralController(hiddenNodes);
+                controllersForGames.Add(controller);
+                FlappyGame game = new FlappyGame(controller);
                 gamesRunning.Add(game);
 
                 int index = i;
@@ -62,6 +69,7 @@ namespace FlappyLearn
         }
 
         public event System.Action<float> NewMaxScoreEvent;
+        public event System.Action<float[]> NewMaxScoreGenome;
         public event System.Action<int> NewVisualisedBirdEvent;
 
         public event System.Action<int> NewGenerationStartedEvent;
@@ -73,6 +81,11 @@ namespace FlappyLearn
             {
                 maxScore = score;
                 NewMaxScoreEvent?.Invoke(score);
+                if (controllersForGames[gameIndex] is NeuralController)
+                {
+                    NeuralController neuralController = (NeuralController)(controllersForGames[gameIndex]);
+                    NewMaxScoreGenome?.Invoke(neuralController.NetGenome());
+                }
             }
 
 

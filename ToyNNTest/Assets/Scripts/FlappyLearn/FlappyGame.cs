@@ -18,7 +18,8 @@ namespace FlappyLearn
         public static float numPillars = 5;
         public static float minPillarGapMidpoint = 3;
         public static float maxPillarGapMidpoint = 17;
-        
+        public static float maxBirdHeight = 23;
+
 
         Pillar[] pillarsArray;
         Queue<Pillar> pillars;
@@ -154,8 +155,8 @@ namespace FlappyLearn
         {
             if (GameRunning == false)
                 return true;
-
-            if (bird.Height < 0)
+            
+            if (bird.Height < 0 || bird.Height > maxBirdHeight)
             {
                 BirdDie();
                 return true;

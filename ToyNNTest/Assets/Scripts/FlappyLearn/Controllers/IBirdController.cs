@@ -11,6 +11,13 @@ namespace FlappyLearn
     {
         public float distToPipe;
         public float heightAboveMidPoint;
+
+        public float[] StateToArray {
+            get
+            {
+                return new float[2] { distToPipe, heightAboveMidPoint };
+            }
+        }
     }
 
 
