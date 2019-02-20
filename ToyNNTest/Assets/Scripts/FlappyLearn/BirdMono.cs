@@ -27,6 +27,8 @@ namespace FlappyLearn
         FlappyGame flappyGame;
         int flappyGameIndex;
 
+        public float[] firstGenome;
+
         void Start()
         {
             controllersForGames = new List<IBirdController>();
@@ -35,14 +37,20 @@ namespace FlappyLearn
                 controllersForGames.Add(new HumanController());
             } else
             {
-                controllersForGames.Add(new NeuralController(hiddenNodes));
+                if (firstGenome != null && firstGenome.Length > 3)
+                {
+                    controllersForGames.Add(new NeuralController(firstGenome));
+                } else
+                {
+                    controllersForGames.Add(new NeuralController(hiddenNodes));
+                }
             }
 
             FlappyGame = new FlappyGame(controllersForGames[0]);
 
             FlappyGame.OnPillarOffScreenEvent += () =>
             {
-                Debug.Log("PILLAR OFF SCREEN");
+                //Debug.Log("PILLAR OFF SCREEN");
                 ResetPillarArray();
             };
 
@@ -68,6 +76,11 @@ namespace FlappyLearn
             }
         }
 
+        public IBirdController GetCurrentController()
+        {
+            return controllersForGames[flappyGameIndex];
+        }
+
         public event System.Action<float> NewMaxScoreEvent;
         public event System.Action<float[]> NewMaxScoreGenome;
         public event System.Action<int> NewVisualisedBirdEvent;
@@ -84,7 +97,8 @@ namespace FlappyLearn
                 if (controllersForGames[gameIndex] is NeuralController)
                 {
                     NeuralController neuralController = (NeuralController)(controllersForGames[gameIndex]);
-                    NewMaxScoreGenome?.Invoke(neuralController.NetGenome());
+                    NewMaxScoreGenome?.Invoke(neuralController.GetGenome());
+                    GUIUtility.systemCopyBuffer = neuralController.GetGenomeString();
                 }
             }
 
@@ -196,10 +210,17 @@ namespace FlappyLearn
                 return;
             }
 
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                NeuralController neuralController = ( NeuralController)controllersForGames[flappyGameIndex];
+                GUIUtility.systemCopyBuffer = neuralController.GetGenomeString();
+            }
+
             for (int i = 0; i < ticksPerFrame; i++)
             {
                 GameTick(Time.deltaTime);
             }
+            ResetPillarArray();
         }
 
         void GameTick(float deltaTime)

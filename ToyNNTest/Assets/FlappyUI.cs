@@ -8,7 +8,7 @@ namespace FlappyLearn
 
     public class FlappyUI : MonoBehaviour
     {
-        public TMPro.TextMeshProUGUI currentBirdText, remainingThisGenText, currentGenerationText, currentScoreText, highScoreText, highScoreGenomeText;
+        public TMPro.TextMeshProUGUI currentBirdText, remainingThisGenText, currentGenerationText, currentScoreText, highScoreText, highScoreGenomeText, currentGenomeText;
         public GameObject generationsCompleteGO;
 
         public BirdMono gameController;
@@ -23,12 +23,33 @@ namespace FlappyLearn
             UpdateCurrentBird(0);
             UpdateAlive(0);
             NewGeneration(0);
+            currentGenomeText.text = "";
 
             gameController.NewGenerationStartedEvent += NewGeneration;
             gameController.NewVisualisedBirdEvent += UpdateCurrentBird;
+
+            gameController.NewVisualisedBirdEvent += UpdateCurrentGenome;
+            gameController.NewGenerationStartedEvent += UpdateCurrentGenome;
+
             gameController.NewMaxScoreEvent += UpdateHighScore;
             gameController.AllGenerationsCompleteEvent += () => { generationsCompleteGO.SetActive(true); };
             gameController.NewMaxScoreGenome += UpdatehighScoreGenome;
+        }
+
+        void UpdateCurrentGenome(int index)
+        {
+            string s;
+            IBirdController birdController = gameController.GetCurrentController();
+            if (birdController is NeuralController)
+            {
+                NeuralController neuralController = (NeuralController)birdController;
+                s = "Current controller genome: \n" + neuralController.GetGenomeString();
+            } else
+            {
+                s = "Current controller is not a neural controller";
+            }
+
+            currentGenomeText.text = s;
         }
 
         private void Update()

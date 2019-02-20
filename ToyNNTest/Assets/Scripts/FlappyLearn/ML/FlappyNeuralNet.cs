@@ -88,7 +88,7 @@ namespace FlappyLearn
             {
                 for (int j = 0; j < FirstHiddenLayerNodes; j++)
                 {
-                    inputToHiddenWeights[i, j] = Random.Range(-0.3f, 0.3f);
+                    inputToHiddenWeights[i, j] = Random.Range(-5f, 5f);
                 }
             }
 
@@ -97,7 +97,7 @@ namespace FlappyLearn
             {
                 for (int j = 0; j < NumOutputNodes; j++)
                 {
-                    hiddenToOutputWeights[i, j] = Random.Range(-0.3f, 0.3f);
+                    hiddenToOutputWeights[i, j] = Random.Range(-5f, 5f);
                 }
             }
         }
@@ -105,42 +105,36 @@ namespace FlappyLearn
 
         #region GeneticAlorithm
 
-        //public NeuralNet(float[] genome)
-        //{
-        //    this.NumInputNodes = (int)genome[0];
-        //    this.FirstHiddenLayerNodes = (int)genome[1];
-        //    this.NumOutputNodes = (int)genome[2];
-        //    if (this.NumOutputNodes != GameControl.NUM_OUTPUTS_FOR_NN)
-        //    {
-        //        Debug.Log("[" + genome[0] + "," + genome[1] + "," + genome[2] + "]");
-        //        Debug.LogError("NUM OUTPUT NODES != 2");
-        //        Debug.Break();
-        //    }
-        //    SetupFromGenome(genome);
-        //}
+        public FlappyNeuralNet(float[] genome)
+        {
+            this.NumInputNodes = (int)genome[0];
+            this.FirstHiddenLayerNodes = (int)genome[1];
+            this.NumOutputNodes = (int)genome[2];
+            SetupFromGenome(genome);
+        }
 
-        //void SetupFromGenome(float[] genome)
-        //{
+        void SetupFromGenome(float[] genome)
+        {
 
-        //    inputToHiddenWeights = new float[NumInputNodes + 1, FirstHiddenLayerNodes];
-        //    for (int i = 0; i < NumInputNodes + 1; i++)
-        //    {
-        //        for (int j = 0; j < FirstHiddenLayerNodes; j++)
-        //        {
-        //            inputToHiddenWeights[i, j] = genome[3 + i * FirstHiddenLayerNodes + j];
-        //        }
-        //    }
+            inputToHiddenWeights = new float[NumInputNodes + 1, FirstHiddenLayerNodes];
+            for (int i = 0; i < NumInputNodes + 1; i++)
+            {
+                for (int j = 0; j < FirstHiddenLayerNodes; j++)
+                {
+                    inputToHiddenWeights[i, j] = genome[3 + i * FirstHiddenLayerNodes + j];
+                }
+            }
 
-        //    int offset = (NumInputNodes + 1) * FirstHiddenLayerNodes + 3;
-        //    hiddenToOutputWeights = new float[FirstHiddenLayerNodes + 1, NumOutputNodes];
-        //    for (int i = 0; i < FirstHiddenLayerNodes + 1; i++)
-        //    {
-        //        for (int j = 0; j < NumOutputNodes; j++)
-        //        {
-        //            hiddenToOutputWeights[i, j] = genome[offset + i * NumOutputNodes + j];
-        //        }
-        //    }
-        //}
+            int offset = (NumInputNodes + 1) * FirstHiddenLayerNodes + 3;
+            hiddenToOutputWeights = new float[FirstHiddenLayerNodes + 1, NumOutputNodes];
+            for (int i = 0; i < FirstHiddenLayerNodes + 1; i++)
+            {
+                for (int j = 0; j < NumOutputNodes; j++)
+                {
+                    hiddenToOutputWeights[i, j] = genome[offset + i * NumOutputNodes + j];
+                }
+            }
+        }
 
         public float[] GetGenome()
         {
