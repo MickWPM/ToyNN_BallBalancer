@@ -20,12 +20,7 @@ namespace FlappyLearn
             pillarDown.localPosition = new Vector3(0, pillar.CentrePointGap - Pillar.gapHalfHeight, 0);
         }
 
-        private void Update()
-        {
-            UpdatePosition();
-        }
-
-        void UpdatePosition()
+        public void UpdatePosition()
         {
             pillarParent.position = new Vector3(pillar.CentrePointX,0,0);
         }

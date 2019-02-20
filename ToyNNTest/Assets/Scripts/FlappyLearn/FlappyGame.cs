@@ -18,7 +18,7 @@ namespace FlappyLearn
         public static float numPillars = 5;
         public static float minPillarGapMidpoint = 3;
         public static float maxPillarGapMidpoint = 17;
-
+        
 
         Pillar[] pillarsArray;
         Queue<Pillar> pillars;
@@ -28,6 +28,7 @@ namespace FlappyLearn
         bool gameRunning = false;
 
         public event System.Action<float> OnGameEndedEvent;
+        public event System.Action OnPillarOffScreenEvent;
 
         public FlappyGame(IBirdController controller, bool autostart = false)
         {
@@ -52,6 +53,8 @@ namespace FlappyLearn
                 Pillar p = new Pillar(xPos, Random.Range(minPillarGapMidpoint, maxPillarGapMidpoint));
                 pillars.Enqueue(p);
             }
+            pillarsArray = pillars.ToArray();
+
             gameRunning = true;
         }
 
@@ -119,23 +122,33 @@ namespace FlappyLearn
 
         void UpdatePillarMovement()
         {
+            bool pillarOffScrren = false;
+
             foreach (Pillar p in pillars)
             {
                 p.MovePillar(movementPerSecond * deltaTime);
             }
 
             Pillar firstPillar = pillars.Peek();
-            if (firstPillar.CentrePointX < pillarEndLoc)
+            if (firstPillar.CentrePointX + Pillar.halfWidth < pillarEndLoc)
             {
                 pillars.Dequeue();
                 Pillar p = new Pillar(pillarStartLoc, Random.Range(minPillarGapMidpoint, maxPillarGapMidpoint));
                 pillars.Enqueue(p);
+                pillarOffScrren = true;
             }
+
+            pillarsArray = pillars.ToArray();
+
+            if (pillarOffScrren)
+                OnPillarOffScreenEvent?.Invoke();
         }
 
 
         bool CheckDeath()
         {
+            if (gameRunning == false)
+                return true;
 
             if (bird.Height < 0)
             {
@@ -157,6 +170,7 @@ namespace FlappyLearn
         void BirdDie()
         {
             bird.Die();
+            gameRunning = false;
             OnGameEndedEvent?.Invoke(gameTime);
         }
 
