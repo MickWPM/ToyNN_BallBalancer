@@ -7,6 +7,12 @@ namespace FlappyLearn
 
     public class BirdMono : MonoBehaviour
     {
+        public float maxScore = 0;
+
+        public int numToRun = 5;
+        List<FlappyGame> gamesRunning;
+        public int numStillRunning;
+
         public bool useHuman = true;
         PillarMono[] pillarGraphics;
         public Transform birdDemo;
@@ -15,6 +21,7 @@ namespace FlappyLearn
 
         float deltaTime;
         FlappyGame flappyGame;
+        int flappyGameIndex;
 
         void Start()
         {
@@ -26,25 +33,83 @@ namespace FlappyLearn
                 flappyGame = new FlappyGame(new RandomController(), true);
             }
 
-            flappyGame.OnGameEndedEvent += GameFinished;
             flappyGame.OnPillarOffScreenEvent += () =>
             {
                 Debug.Log("PILLAR OFF SCREEN");
                 ResetPillarArray();
             };
+
+            gamesRunning = new List<FlappyGame>();
+            gamesRunning.Add(flappyGame);
+
+            flappyGame.OnGameEndedEvent += (float s) => { GameFinished(s); };
+            flappyGameIndex = 0;
+
+            for (int i = 1; i < numToRun; i++)
+            {
+                FlappyGame game = new FlappyGame(new RandomController());
+                gamesRunning.Add(game);
+
+                int index = i;
+                game.OnGameEndedEvent += (float s) => 
+                {
+                    Debug.Log("Game index "+index+"finished with score of " + s);
+                    GameFinished(s, index);
+                };
+            }
         }
 
-        public void GameFinished(float score)
+        public void GameFinished(float score, int gameIndex = 0)
         {
-            gameStarted = false;
-            Debug.Log("SCORE: " + score);
+            --numStillRunning;
+            Debug.Log("SCORE FOR GAME INDEX " + gameIndex +" : " + score);
+            if (score > maxScore)
+                maxScore = score;
+
+
+            if (numStillRunning <= 0)
+            {
+                gameStarted = false;
+                Debug.Log("ALL GAMES FINISHED");
+                return;
+            }
+
+            if (gameIndex == flappyGameIndex)
+            {
+                //UPDATE VISUALS
+                for (int i = 0; i < gamesRunning.Count; i++)
+                {
+                    if (gamesRunning[i].GameRunning)
+                    {
+                        SetVisualsToGame(i);
+                        return;
+                    }
+                }
+            }
+        }
+
+        void SetVisualsToGame(int index)
+        {
+            flappyGameIndex = index;
+            flappyGame = gamesRunning[flappyGameIndex];
+            //TODO: UPATE VISUALSResetPillarArray()
+            ResetPillarArray();
         }
 
         void StartNewGame()
         {
             Debug.Log("GAME STARTING");
-            flappyGame.StartNewGame();
+
+            numStillRunning = gamesRunning.Count;
+            for (int i = 0; i < gamesRunning.Count; i++)
+            {
+                gamesRunning[i].StartNewGame();
+            }
+
+            //flappyGame.StartNewGame();
+            
             gameStarted = true;
+
             Pillar[] pillars = flappyGame.GetPillars();
 
             if (pillarGraphics == null || pillarGraphics.Length != pillars.Length)
@@ -88,7 +153,12 @@ namespace FlappyLearn
 
         void GameTick(float deltaTime)
         {
-            flappyGame.Tick(Time.deltaTime);
+
+            for (int i = 0; i < numToRun; i++)
+            {
+                gamesRunning[i].Tick(deltaTime);
+            }
+
             UpdateBirdMovement();
             UpdatePillarMovement();
         }

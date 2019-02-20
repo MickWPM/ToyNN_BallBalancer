@@ -55,8 +55,9 @@ namespace FlappyLearn
             }
             pillarsArray = pillars.ToArray();
 
-            gameRunning = true;
+            GameRunning = true;
         }
+
 
         public float BirdHeight()
         {
@@ -73,7 +74,7 @@ namespace FlappyLearn
         float movementPerSecond = 5;
         public bool Tick(float deltaTime)
         {
-            if (gameRunning == false)
+            if (GameRunning == false)
                 return false;
 
             this.deltaTime = deltaTime;
@@ -104,6 +105,9 @@ namespace FlappyLearn
 
         float distToNearestPillar;
         Pillar nearestPillar;
+
+        public bool GameRunning { get => gameRunning; protected set => gameRunning = value; }
+
         public void UpdateBirdMovement()
         {
             nearestPillar = (pillarsArray[0].CentrePointX + Pillar.halfWidth) > 0 ? pillarsArray[0] : pillarsArray[1];
@@ -147,7 +151,7 @@ namespace FlappyLearn
 
         bool CheckDeath()
         {
-            if (gameRunning == false)
+            if (GameRunning == false)
                 return true;
 
             if (bird.Height < 0)
@@ -170,7 +174,7 @@ namespace FlappyLearn
         void BirdDie()
         {
             bird.Die();
-            gameRunning = false;
+            GameRunning = false;
             OnGameEndedEvent?.Invoke(gameTime);
         }
 

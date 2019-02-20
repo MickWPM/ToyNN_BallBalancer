@@ -302,19 +302,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c14c57eaf34b84ca3d94369a6fca10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startHeight: 10
-  flapForce: 3000
-  birdController:
-    baseDeltaTime: 0
-    birds: []
-  pillarStartLoc: 40
-  pillarEndLoc: -10
-  numPillars: 5
-  minGapMidpoint: 3
-  maxGapMidpoint: 17
+  maxScore: 0
+  numToRun: 100
+  numStillRunning: 0
+  useHuman: 1
   birdDemo: {fileID: 535699786}
   pillarMonoPrefab: {fileID: 5579133822933039967, guid: 08fe8a17f4bb29f4ab109027576f22a0,
     type: 3}
+  ticksPerFrame: 1
 --- !u!4 &535699786
 Transform:
   m_ObjectHideFlags: 0
