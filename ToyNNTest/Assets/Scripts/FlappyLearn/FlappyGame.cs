@@ -43,7 +43,7 @@ namespace FlappyLearn
 
         public void StartNewGame()
         {
-            gameTime = 0;
+            GameTime = 0;
             bird = new Bird( birdStartHeight );
             pillars = new Queue<Pillar>();
             float pillarSpacing = (pillarStartLoc - pillarEndLoc) / numPillars;
@@ -78,7 +78,7 @@ namespace FlappyLearn
                 return false;
 
             this.deltaTime = deltaTime;
-            gameTime += movementPerSecond * deltaTime;
+            GameTime += movementPerSecond * deltaTime;
 
             UpdatePillarMovement();
             pillarsArray = pillars.ToArray();
@@ -107,6 +107,7 @@ namespace FlappyLearn
         Pillar nearestPillar;
 
         public bool GameRunning { get => gameRunning; protected set => gameRunning = value; }
+        public float GameTime { get => gameTime; protected set => gameTime = value; }
 
         public void UpdateBirdMovement()
         {
@@ -175,7 +176,7 @@ namespace FlappyLearn
         {
             bird.Die();
             GameRunning = false;
-            OnGameEndedEvent?.Invoke(gameTime);
+            OnGameEndedEvent?.Invoke(GameTime);
         }
 
     }
