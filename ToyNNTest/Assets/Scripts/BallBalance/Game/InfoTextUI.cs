@@ -7,7 +7,7 @@ namespace BallBalance
     public class InfoTextUI : MonoBehaviour
     {
         public UI_FitnessGraph fitnessGraph;
-        public TMPro.TextMeshProUGUI realtimeInfoTextMesh, bestFitnessTextMesh, newGeneticIndividaulInPopulationTextMesh, newGenerationTextMesh;
+        public TMPro.TextMeshProUGUI realtimeInfoTextMesh, bestFitnessTextMesh, newGeneticIndividaulInPopulationTextMesh, newGenerationTextMesh, levelTimer;
         public GameControl gameControl;
         public GeneticController geneticControl;
         public GameObject trainingCompleteGO;
@@ -19,6 +19,7 @@ namespace BallBalance
         public int numTopFitnessesToRecord = 20;
         private void Awake()
         {
+            
             geneticControl.NewBestFitnessEvent += (float fitness) =>
                                     {
                                         bestFitnessTextMesh.text = "Best Fitness this generation: " + fitness;
@@ -93,7 +94,7 @@ namespace BallBalance
         void Update()
         {
             realtimeInfoTextMesh.text = "CONTROLLER: " + gameControl.controllerBrain + "\n" + gameControl.GetDataString() + "\n\nCurrent score: " + gameControl.GetFitnessScore().ToString();
-
+            levelTimer.text = "Level Time: " + gameControl.levelTime;
         }
     }
 }

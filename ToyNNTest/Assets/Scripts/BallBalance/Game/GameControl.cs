@@ -121,11 +121,26 @@ namespace BallBalance
             //StartGame();
         }
 
+        float fitness;
+        public bool scaleFitnessByInverseDistance = false;
+        float LevelTimeMod()
+        {
+            if (!scaleFitnessByInverseDistance)
+            {
+                return 1;
+            }
+
+            float dist = Mathf.Sqrt(ballTransform.position.x * ballTransform.position.x + ballTransform.position.z * ballTransform.position.z);
+            float scaler = 1 / (Mathf.Max(1, dist));
+            return scaler;
+        }
+
         private void Update()
         {
             if (playing)
             {
                 levelTime += Time.deltaTime;
+                fitness += Time.deltaTime * LevelTimeMod();
                 if (levelTime > maxLevelCutoffTime)
                 {
                     Debug.LogWarning("MAX LEVEL CUTOFF TIME REACHED. Level time = " + levelTime + ". Cutoff = " + maxLevelCutoffTime);
@@ -182,7 +197,6 @@ namespace BallBalance
         }
 
         public float numFoundFitnessScaler = 2;
-        public float levelTimeFitnessScaler = 1f;
         public float minTimeToCountFound = 5f;
         public float GetFitnessScore()
         {
@@ -192,7 +206,8 @@ namespace BallBalance
             //    numFoundVal += i;
             //}
 
-            return /*numFoundVal * numFoundFitnessScaler +*/ levelTime * levelTimeFitnessScaler;
+            //return /*numFoundVal * numFoundFitnessScaler +*/ levelTime;
+            return fitness;
         }
 
         int numFound = 0;
@@ -241,6 +256,7 @@ namespace BallBalance
             numFound = 0;
             currentScore = 0;
             levelTime = 0;
+            fitness = 0;
             transform.rotation = Quaternion.Euler(Vector3.zero);
             ballRB.isKinematic = false;
             ballTransform.GetComponent<Rigidbody>().velocity = Vector3.zero;

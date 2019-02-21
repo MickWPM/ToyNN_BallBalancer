@@ -37,6 +37,15 @@ namespace BallBalance
         {
             if (doTime)
                 totalTime += Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                Time.timeScale = 1;
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                Time.timeScale = timeScalingDuringGame;
+            }
         }
 
         void NextGame()
